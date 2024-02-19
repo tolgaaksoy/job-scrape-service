@@ -1,7 +1,7 @@
 package io.jobmarks.jobscrapeservice.linkedin.service;
 
-
 import io.jobmarks.jobscrapeservice.linkedin.model.*;
+import io.jobmarks.jobscrapeservice.linkedin.repository.LinkedInJobPostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +13,20 @@ import java.util.List;
 public class LinkedInScrapeService {
 
     private final LinkedInFeignClientAdapter feignClientAdapter;
+    private final LinkedInJobPostRepository linkedInJobPostRepository;
 
-    public LinkedInScrapeService(LinkedInFeignClientAdapter feignClientAdapter) {
+    public LinkedInScrapeService(LinkedInFeignClientAdapter feignClientAdapter,
+                                 LinkedInJobPostRepository linkedInJobPostRepository) {
         this.feignClientAdapter = feignClientAdapter;
+        this.linkedInJobPostRepository = linkedInJobPostRepository;
     }
 
     public JobResponse scrape(LinkedInFilter filter) {
         List<LinkedInJobPost> jobList = new ArrayList<>();
-        while (jobList.size() < filter.getLimit()) {
+        while ((filter.getPage() == null ? 0 : filter.getPage()) * 25 < filter.getLimit()) {
             LinkedInJobsDocument linkedInJobsDocument = fetchJobsDocument(filter);
             if (linkedInJobsDocument != null) {
-                processJobCards(jobList, linkedInJobsDocument, filter);
+                processJobCards(jobList, linkedInJobsDocument);
             }
             filter.nextPage();
         }
@@ -40,15 +43,18 @@ public class LinkedInScrapeService {
         }
     }
 
-    private void processJobCards(List<LinkedInJobPost> jobList, LinkedInJobsDocument linkedInJobsDocument, LinkedInFilter filter) {
+    private void processJobCards(List<LinkedInJobPost> jobList, LinkedInJobsDocument linkedInJobsDocument) {
         for (LinkedinJobCardElement jobCard : linkedInJobsDocument.getLinkedInJobCardElements()) {
-            LinkedInJobPost jobPost = createJobPost(jobCard);
-            jobList.add(jobPost);
+            if (!linkedInJobPostRepository.existsByExternalId(jobCard.getExternalId())) {
+                LinkedInJobPost jobPost = createJobPost(jobCard);
+                jobList.add(jobPost);
+            }
         }
     }
 
     private LinkedInJobPost createJobPost(LinkedinJobCardElement jobCard) {
         LinkedInJobPost.LinkedInJobPostBuilder jobPostBuilder = LinkedInJobPost.builder()
+                .externalId(jobCard.getExternalId())
                 .title(jobCard.getTitle())
                 .companyName(jobCard.getCompanyName())
                 .companyUrl(jobCard.getCompanyUrl())
@@ -57,15 +63,17 @@ public class LinkedInScrapeService {
                 .jobUrl(jobCard.getJobUrl())
                 .compensation(jobCard.getCompensation())
                 .benefits(jobCard.getBenefits());
-
         try {
             LinkedInJobDescriptionDocument jobDescription = feignClientAdapter.getJob(jobCard.getExternalId());
-            jobPostBuilder.description(jobDescription.getDescription())
+            jobPostBuilder
+                    .description(jobDescription.getDescription())
                     .jobType(jobDescription.getJobType());
         } catch (Exception e) {
             log.error("Exception while fetching job description: {}", e.getMessage(), e);
         }
-        return jobPostBuilder.build();
+        LinkedInJobPost jobPost = jobPostBuilder.build();
+        linkedInJobPostRepository.save(jobPost);
+        return jobPost;
     }
 
     private void logJobList(List<LinkedInJobPost> jobList) {

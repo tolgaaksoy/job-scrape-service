@@ -1,5 +1,6 @@
 package io.jobmarks.jobscrapeservice.linkedin.model;
 
+import lombok.Getter;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -8,11 +9,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Getter
 public class LinkedInJobsDocument {
 
     private static final String JOB_CARD_SELECTOR = "div.base-search-card";
 
     private final Document document;
+
     private final List<LinkedinJobCardElement> linkedInJobCardElements;
 
     public LinkedInJobsDocument(Document document) {
@@ -21,10 +24,6 @@ public class LinkedInJobsDocument {
         }
         this.document = document;
         this.linkedInJobCardElements = getLinkedInJobCardElementsFromDocument();
-    }
-
-    public List<LinkedinJobCardElement> getLinkedInJobCardElements() {
-        return this.linkedInJobCardElements;
     }
 
     private List<LinkedinJobCardElement> getLinkedInJobCardElementsFromDocument() {

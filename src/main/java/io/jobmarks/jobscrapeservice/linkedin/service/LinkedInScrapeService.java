@@ -67,6 +67,10 @@ public class LinkedInScrapeService {
             LinkedInJobDescriptionDocument jobDescription = feignClientAdapter.getJob(jobCard.getExternalId());
             jobPostBuilder
                     .description(jobDescription.getDescription())
+                    .applicantsCount(jobDescription.getApplicantsCount())
+                    .jobFunction(jobDescription.getJobFunction())
+                    .industry(jobDescription.getIndustries())
+                    .seniority(jobDescription.getSeniorityLevel())
                     .jobType(jobDescription.getJobType());
         } catch (Exception e) {
             log.error("Exception while fetching job description: {}", e.getMessage(), e);

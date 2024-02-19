@@ -29,6 +29,12 @@ public class LinkedInJobPost {
     private Location location;
 
     private String description;
+    private List<String>  seniority;
+    private List<String>  industry;
+    private List<String>  jobFunction;
+
+    private String applicantsCount;
+
     private String companyUrl;
 
     private List<String> jobType;

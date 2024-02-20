@@ -30,7 +30,6 @@ public class LinkedInScrapeService {
             }
             filter.nextPage();
         }
-        logJobList(jobList);
         return new JobResponse(jobList);
     }
 
@@ -78,13 +77,5 @@ public class LinkedInScrapeService {
         LinkedInJobPost jobPost = jobPostBuilder.build();
         linkedInJobPostRepository.save(jobPost);
         return jobPost;
-    }
-
-    private void logJobList(List<LinkedInJobPost> jobList) {
-        StringBuilder jobs = new StringBuilder();
-        for (LinkedInJobPost job : jobList) {
-            jobs.append("--------------\n").append(job).append("\n");
-        }
-        log.info("Jobs:\n{}", jobs);
     }
 }

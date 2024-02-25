@@ -1,5 +1,8 @@
 package io.jobmarks.jobscrapeservice.common.model;
 
+import lombok.Getter;
+
+@Getter
 public enum CompensationInterval {
     YEARLY("yearly"),
     MONTHLY("monthly"),

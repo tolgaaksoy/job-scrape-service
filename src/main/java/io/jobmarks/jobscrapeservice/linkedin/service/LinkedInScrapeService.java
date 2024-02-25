@@ -30,7 +30,7 @@ public class LinkedInScrapeService {
             }
             filter.nextPage();
         }
-        return new JobResponse(jobList);
+        return JobResponse.builder().linkedInJobPosts(jobList).build();
     }
 
     private LinkedInJobsDocument fetchJobsDocument(LinkedInFilter filter) {

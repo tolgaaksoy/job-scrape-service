@@ -1,16 +1,16 @@
 package io.jobmarks.jobscrapeservice.linkedin.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.jobmarks.jobscrapeservice.indeed.model.IndeedJobPost;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class JobResponse {
-    private List<LinkedInJobPost> jobs;
+    private List<LinkedInJobPost> linkedInJobPosts;
+    private List<IndeedJobPost> indeedJobPosts;
 }

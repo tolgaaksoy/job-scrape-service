@@ -13,6 +13,7 @@ public abstract class BaseFilter {
     private Integer limit = 50;
     private Integer page;
     private Integer size;
+    private Integer offset;
 
     public void nextPage() {
         if (this.page == null) {

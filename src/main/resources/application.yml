@@ -4,3 +4,13 @@ spring:
       host: localhost
       port: 27017
       database: job_scrape_db
+
+indeed:
+  search-jobs:
+    api:
+      url: https://www.indeed.com/m/jobs
+      user-agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Indeed App 193.1
+  get-job-details:
+    api:
+      url: https://apis.indeed.com/graphql
+      key: 161092c2017b5bbab13edb12461a62d5a833871e7cad6d9d475304573de67ac8

@@ -10,7 +10,7 @@ import java.io.IOException;
 public class DocumentReadWriteUtil {
 
     //For testing purposes
-    private void writeResponseToFile(Document document, String folder, String fileName) {
+    public static void writeResponseToFile(Document document, String folder, String fileName) {
         try {
             String resourceFolderPath = "src/main/resources/" + folder + "/";
             createFolderIfNotExists(resourceFolderPath);  // Ensure the folder exists
@@ -21,12 +21,13 @@ public class DocumentReadWriteUtil {
                 writer.write(document.outerHtml());
             }
         } catch (IOException e) {
+            e.printStackTrace();
             //log.error("Write file exception:  folder = src/main/resources/{} ~ file name = {} ~ message: {}", folder, fileName, e.getMessage());
         }
     }
 
     //For testing purposes
-    private void createFolderIfNotExists(String folderPath) {
+    private static void createFolderIfNotExists(String folderPath) {
         File folder = new File(folderPath);
         if (!folder.exists()) {
             folder.mkdirs();
@@ -34,7 +35,7 @@ public class DocumentReadWriteUtil {
     }
 
     //For testing purposes
-    public Document readResponseFromFile(String fileName, String folder) {
+    public static Document readResponseFromFile(String fileName, String folder) {
         try {
             String resourceFolderPath = "src/main/resources/" + folder;
             File file = new File(resourceFolderPath + fileName);
@@ -42,6 +43,7 @@ public class DocumentReadWriteUtil {
             // Read the content of the file using Jsoup
             return Jsoup.parse(file, "UTF-8");
         } catch (IOException e) {
+            e.printStackTrace();
             //log.error("Read file exception:  folder = src/main/resources/{} ~ file name = {} ~ message: {}", folder, fileName, e.getMessage());
             return null;
         }

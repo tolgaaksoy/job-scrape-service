@@ -22,8 +22,8 @@ public class ApiLog {
     private String headers;
     private Integer status;
     private Long duration;
-    private Instant requestTimestamp;
-    private Instant responseTimestamp;
+    private Instant requestDate;
+    private Instant responseDate;
     private String exception;
     private String stackTrace;
 }

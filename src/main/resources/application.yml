@@ -5,6 +5,14 @@ spring:
       port: 27017
       database: job_scrape_db
 
+linkedin:
+  search-jobs:
+    api:
+      url: https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search
+  get-job-details:
+    api:
+      url: https://www.linkedin.com/jobs/view/
+
 indeed:
   search-jobs:
     api:

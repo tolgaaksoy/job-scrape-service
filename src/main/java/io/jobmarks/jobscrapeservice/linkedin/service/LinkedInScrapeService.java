@@ -12,10 +12,10 @@ import java.util.List;
 @Service
 public class LinkedInScrapeService {
 
-    private final LinkedInFeignClientAdapter feignClientAdapter;
+    private final LinkedInClientAdapter feignClientAdapter;
     private final LinkedInJobPostRepository linkedInJobPostRepository;
 
-    public LinkedInScrapeService(LinkedInFeignClientAdapter feignClientAdapter,
+    public LinkedInScrapeService(LinkedInClientAdapter feignClientAdapter,
                                  LinkedInJobPostRepository linkedInJobPostRepository) {
         this.feignClientAdapter = feignClientAdapter;
         this.linkedInJobPostRepository = linkedInJobPostRepository;
